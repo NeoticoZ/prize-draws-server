@@ -5,3 +5,4 @@ export * from "./add-participation";
 export * from "./add-draw";
 export * from "./delete-draw";
 export * from "./load-participations";
+export * from "./load-account-by-token";

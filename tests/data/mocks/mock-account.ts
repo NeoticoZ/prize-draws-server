@@ -2,6 +2,7 @@ import {
   AddAccountRepository,
   CheckAccountByEmailRepository,
   LoadAccountByEmailRepository,
+  LoadAccountByTokenRepository,
   UpdateAccessTokenRepository,
 } from "@/data/contracts";
 
@@ -66,6 +67,25 @@ export class CheckAccountByEmailRepositoryMock
   ): Promise<CheckAccountByEmailRepository.Output> {
     this.callsCount++;
     this.email = email;
+    return this.output;
+  }
+}
+
+export class LoadAccountByTokenRepositoryStub
+  implements LoadAccountByTokenRepository
+{
+  token: string;
+  role?: string;
+  callsCount = 0;
+  output = { id: "any_id" };
+
+  async loadByToken({
+    token,
+    role,
+  }: LoadAccountByTokenRepository.Params): Promise<LoadAccountByTokenRepository.Output> {
+    this.callsCount++;
+    this.token = token;
+    this.role = role;
     return this.output;
   }
 }

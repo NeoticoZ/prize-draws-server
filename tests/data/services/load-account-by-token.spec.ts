@@ -1,90 +1,12 @@
 import { throwError } from "@/tests/domain/mocks";
-
-class LoadAccountByToken {
-  constructor(
-    private loadAccountByTokenRepository: LoadAccountByTokenRepository,
-    private decrypter: Decrypter
-  ) {}
-
-  async load(
-    accessToken: string,
-    role?: string
-  ): Promise<LoadAccountByTokenRepository.Output> {
-    let token = "";
-    try {
-      token = await this.decrypter.decrypt(accessToken);
-    } catch (error) {
-      return null;
-    }
-
-    if (token) {
-      const account = await this.loadAccountByTokenRepository.loadByToken({
-        token,
-        role,
-      });
-
-      if (account) {
-        return account;
-      }
-    }
-
-    return null;
-  }
-}
-
-interface LoadAccountByTokenRepository {
-  loadByToken({
-    token,
-    role,
-  }: LoadAccountByTokenRepository.Params): Promise<LoadAccountByTokenRepository.Output>;
-}
-
-namespace LoadAccountByTokenRepository {
-  export type Params = {
-    token: string;
-    role?: string;
-  };
-
-  export type Output = {
-    id: string;
-  };
-}
-
-class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
-  token: string;
-  role?: string;
-  callsCount = 0;
-  output = { id: "any_id" };
-
-  async loadByToken({
-    token,
-    role,
-  }: LoadAccountByTokenRepository.Params): Promise<LoadAccountByTokenRepository.Output> {
-    this.callsCount++;
-    this.token = token;
-    this.role = role;
-    return this.output;
-  }
-}
-
-interface Decrypter {
-  decrypt: (ciphertext: string) => Promise<string>;
-}
-
-class DecrypterStub implements Decrypter {
-  ciphertext: string;
-  callsCount = 0;
-  output = "any_plaintext";
-
-  async decrypt(ciphertext: string): Promise<string> {
-    this.callsCount++;
-    this.ciphertext = ciphertext;
-    return this.output;
-  }
-}
+import { LoadAccountByTokenService } from "@/data/services";
+import {
+  DecrypterStub,
+  LoadAccountByTokenRepositoryStub,
+} from "@/tests/data/mocks";
 
 type SutTypes = {
-  sut: LoadAccountByToken;
+  sut: LoadAccountByTokenService;
   loadAccountByTokenRepositoryStub: LoadAccountByTokenRepositoryStub;
   decrypterStub: DecrypterStub;
 };
@@ -93,7 +15,7 @@ const makeSut = (): SutTypes => {
   const loadAccountByTokenRepositoryStub =
     new LoadAccountByTokenRepositoryStub();
   const decrypterStub = new DecrypterStub();
-  const sut = new LoadAccountByToken(
+  const sut = new LoadAccountByTokenService(
     loadAccountByTokenRepositoryStub,
     decrypterStub
   );
