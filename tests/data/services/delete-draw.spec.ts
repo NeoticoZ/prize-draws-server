@@ -1,95 +1,12 @@
-import { throwError } from "../../domain/mocks";
+import { throwError } from "@/tests/domain/mocks";
+import { DeleteDrawService } from "@/data/services";
+import {
+  DeleteDrawRepositoryMock,
+  LoadDrawByIdRepositoryMock,
+} from "@/tests/data/mocks";
 
-class DeleteDraw {
-  constructor(
-    private readonly deleteDrawRepository: DeleteDrawRepository,
-    private readonly loadDrawByIdRepository: LoadDrawByIdRepository
-  ) {}
-
-  async execute({
-    drawId,
-    userId,
-  }: DeleteDrawRepository.Params): Promise<void> {
-    const draw = await this.loadDrawByIdRepository.loadById({ drawId });
-    if (draw) {
-      if (draw.userId !== userId) {
-        throw new Error("Unauthorized");
-      }
-      await this.deleteDrawRepository.delete({ drawId, userId });
-    }
-  }
-}
-
-// Delete
-interface DeleteDrawRepository {
-  delete: (params: DeleteDrawRepository.Params) => Promise<void>;
-}
-
-namespace DeleteDrawRepository {
-  export type Params = {
-    drawId: string;
-    userId: string;
-  };
-}
-
-class DeleteDrawRepositoryMock implements DeleteDrawRepository {
-  drawId: string;
-  userId: string;
-  callsCount = 0;
-
-  async delete({ drawId, userId }: DeleteDrawRepository.Params): Promise<void> {
-    this.drawId = drawId;
-    this.userId = userId;
-    this.callsCount++;
-  }
-}
-
-// Load
-interface LoadDrawByIdRepository {
-  loadById: (
-    drawId: LoadDrawByIdRepository.Params
-  ) => Promise<LoadDrawByIdRepository.Output>;
-}
-
-namespace LoadDrawByIdRepository {
-  export type Params = {
-    drawId: string;
-  };
-
-  export type Output = GroupDraw | undefined;
-}
-
-export type GroupDraw = {
-  id: string;
-  name: string;
-  description: string;
-  userId: string;
-  prizeImg: string;
-};
-
-class LoadDrawByIdRepositoryMock implements LoadDrawByIdRepository {
-  drawId: string;
-  callsCount = 0;
-  output: GroupDraw = {
-    id: "any_id",
-    name: "any_name",
-    description: "any_description",
-    userId: "any_user_id",
-    prizeImg: "any_prize_img",
-  };
-
-  async loadById({
-    drawId,
-  }: LoadDrawByIdRepository.Params): Promise<LoadDrawByIdRepository.Output> {
-    this.drawId = drawId;
-    this.callsCount++;
-    return this.output;
-  }
-}
-
-// Sut
 type SutTypes = {
-  sut: DeleteDraw;
+  sut: DeleteDrawService;
   deleteDrawRepositoryMock: DeleteDrawRepositoryMock;
   loadDrawByIdRepositoryMock: LoadDrawByIdRepositoryMock;
 };
@@ -97,7 +14,7 @@ type SutTypes = {
 const makeSut = (): SutTypes => {
   const deleteDrawRepositoryMock = new DeleteDrawRepositoryMock();
   const loadDrawByIdRepositoryMock = new LoadDrawByIdRepositoryMock();
-  const sut = new DeleteDraw(
+  const sut = new DeleteDrawService(
     deleteDrawRepositoryMock,
     loadDrawByIdRepositoryMock
   );
