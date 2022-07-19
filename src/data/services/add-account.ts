@@ -3,17 +3,16 @@ import {
   CheckAccountByEmailRepository,
   Hasher,
 } from "@/data/contracts";
+import { AddAccount } from "@/domain/usecases";
 
-export class AddAccountService {
+export class AddAccountService implements AddAccount {
   constructor(
     private readonly addAccountRepository: AddAccountRepository,
     private readonly checkAccountByEmailRepository: CheckAccountByEmailRepository,
     private readonly hasher: Hasher
   ) {}
 
-  async execute(
-    user: AddAccountRepository.Params
-  ): Promise<AddAccountRepository.Output> {
+  async add(user: AddAccount.Params): Promise<AddAccount.Output> {
     const alreadyExists = await this.checkAccountByEmailRepository.loadByEmail(
       user.email
     );

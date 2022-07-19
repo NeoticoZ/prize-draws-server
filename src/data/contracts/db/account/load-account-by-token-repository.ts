@@ -1,3 +1,5 @@
+import { LoadAccountByToken } from "@/domain/usecases";
+
 export interface LoadAccountByTokenRepository {
   loadByToken({
     token,
@@ -11,7 +13,5 @@ export namespace LoadAccountByTokenRepository {
     role?: string;
   };
 
-  export type Output = {
-    id: string;
-  };
+  export type Output = LoadAccountByToken.Output;
 }

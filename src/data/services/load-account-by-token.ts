@@ -1,6 +1,7 @@
 import { Decrypter, LoadAccountByTokenRepository } from "@/data/contracts";
+import { LoadAccountByToken } from "@/domain/usecases";
 
-export class LoadAccountByTokenService {
+export class LoadAccountByTokenService implements LoadAccountByToken {
   constructor(
     private loadAccountByTokenRepository: LoadAccountByTokenRepository,
     private decrypter: Decrypter
@@ -9,7 +10,7 @@ export class LoadAccountByTokenService {
   async load(
     accessToken: string,
     role?: string
-  ): Promise<LoadAccountByTokenRepository.Output> {
+  ): Promise<LoadAccountByToken.Output> {
     let token = "";
     try {
       token = await this.decrypter.decrypt(accessToken);

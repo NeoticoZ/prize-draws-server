@@ -32,7 +32,7 @@ describe("DeleteDraw", () => {
   it("should call DeleteDrawRepository with correct values", async () => {
     const { sut, deleteDrawRepositoryMock } = makeSut();
 
-    await sut.execute({ drawId, userId });
+    await sut.delete({ drawId, userId });
 
     expect(deleteDrawRepositoryMock.drawId).toBe(drawId);
     expect(deleteDrawRepositoryMock.userId).toBe(userId);
@@ -45,7 +45,7 @@ describe("DeleteDraw", () => {
     jest
       .spyOn(deleteDrawRepositoryMock, "delete")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute({ drawId, userId });
+    const promise = sut.delete({ drawId, userId });
 
     await expect(promise).rejects.toThrow();
   });
@@ -53,7 +53,7 @@ describe("DeleteDraw", () => {
   it("should call LoadDrawByIdRepository with correct value", async () => {
     const { sut, loadDrawByIdRepositoryMock } = makeSut();
 
-    await sut.execute({ drawId, userId });
+    await sut.delete({ drawId, userId });
 
     expect(loadDrawByIdRepositoryMock.drawId).toBe(drawId);
   });
@@ -64,7 +64,7 @@ describe("DeleteDraw", () => {
     jest
       .spyOn(loadDrawByIdRepositoryMock, "loadById")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute({ drawId, userId });
+    const promise = sut.delete({ drawId, userId });
 
     await expect(promise).rejects.toThrow();
   });
@@ -73,7 +73,7 @@ describe("DeleteDraw", () => {
     const { sut, loadDrawByIdRepositoryMock } = makeSut();
 
     loadDrawByIdRepositoryMock.output.userId = "other_user_id";
-    const promise = sut.execute({ drawId, userId });
+    const promise = sut.delete({ drawId, userId });
 
     await expect(promise).rejects.toThrow();
   });

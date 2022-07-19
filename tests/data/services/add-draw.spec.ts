@@ -2,7 +2,7 @@ import { throwError } from "@/tests/domain/mocks";
 import { AddDrawService } from "@/data/services";
 import { AddDrawRepositoryMock } from "@/tests/data/mocks";
 
-export type SutTypes = {
+type SutTypes = {
   sut: AddDrawService;
   addDrawRepository: AddDrawRepositoryMock;
 };
@@ -25,7 +25,7 @@ describe("AddDraw", () => {
   it("should call AddDrawRepository with correct values", async () => {
     const { sut, addDrawRepository } = makeSut();
 
-    await sut.execute({ name, description, userId, prizeImg });
+    await sut.add({ name, description, userId, prizeImg });
 
     expect(addDrawRepository.name).toBe(name);
     expect(addDrawRepository.description).toBe(description);
@@ -38,7 +38,7 @@ describe("AddDraw", () => {
     const { sut, addDrawRepository } = makeSut();
 
     jest.spyOn(addDrawRepository, "add").mockImplementationOnce(throwError);
-    const promise = sut.execute({ name, description, userId, prizeImg });
+    const promise = sut.add({ name, description, userId, prizeImg });
 
     await expect(promise).rejects.toThrowError();
   });

@@ -33,7 +33,7 @@ describe("AddParticipation", () => {
   it("it should call AddParticipationRepository with correct values", async () => {
     const { sut, addParticipationRepositoryMock } = makeSut();
 
-    await sut.execute({ drawId, userId });
+    await sut.add({ drawId, userId });
 
     expect(addParticipationRepositoryMock.drawId).toBe(drawId);
     expect(addParticipationRepositoryMock.userId).toBe(userId);
@@ -46,7 +46,7 @@ describe("AddParticipation", () => {
     jest
       .spyOn(addParticipationRepositoryMock, "add")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute({ drawId, userId });
+    const promise = sut.add({ drawId, userId });
 
     await expect(promise).rejects.toThrow();
   });
@@ -54,7 +54,7 @@ describe("AddParticipation", () => {
   it("should call CheckIfIsParticipingRepository with correct values", async () => {
     const { sut, checkIfIsParticipingRepositoryMock } = makeSut();
 
-    await sut.execute({ drawId, userId });
+    await sut.add({ drawId, userId });
 
     expect(checkIfIsParticipingRepositoryMock.userId).toBe(userId);
     expect(checkIfIsParticipingRepositoryMock.drawId).toBe(drawId);
@@ -67,7 +67,7 @@ describe("AddParticipation", () => {
     jest
       .spyOn(checkIfIsParticipingRepositoryMock, "check")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute({ drawId, userId });
+    const promise = sut.add({ drawId, userId });
 
     await expect(promise).rejects.toThrow();
   });

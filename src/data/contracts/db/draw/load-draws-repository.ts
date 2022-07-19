@@ -1,9 +1,9 @@
-import { Draw } from "@/domain/models";
+import { LoadDraws } from "@/domain/usecases";
 
 export interface LoadDrawsRepository {
-  loadAll(): Promise<LoadDrawsRepository.Output>;
+  loadAll(): Promise<LoadDraws.Output>;
 }
 
 export namespace LoadDrawsRepository {
-  export type Output = Draw[] | undefined;
+  export type Output = LoadDraws.Output;
 }

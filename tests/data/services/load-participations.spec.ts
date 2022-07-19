@@ -25,7 +25,7 @@ describe("LoadParticipations", () => {
   it("should call LoadParticipationsByDrawIdRepository with correct values", async () => {
     const { sut, loadParticipationsByDrawIdRepositoryMock } = makeSut();
 
-    await sut.execute(drawId);
+    await sut.load(drawId);
 
     expect(loadParticipationsByDrawIdRepositoryMock.drawId).toBe(drawId);
     expect(loadParticipationsByDrawIdRepositoryMock.callsCount).toBe(1);
@@ -37,7 +37,7 @@ describe("LoadParticipations", () => {
     jest
       .spyOn(loadParticipationsByDrawIdRepositoryMock, "loadAll")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute(drawId);
+    const promise = sut.load(drawId);
 
     await expect(promise).rejects.toThrow();
   });
@@ -45,7 +45,7 @@ describe("LoadParticipations", () => {
   it("should load all participations", async () => {
     const { sut, loadParticipationsByDrawIdRepositoryMock } = makeSut();
 
-    const promise = await sut.execute(drawId);
+    const promise = await sut.load(drawId);
 
     expect(promise).toEqual(loadParticipationsByDrawIdRepositoryMock.output);
   });

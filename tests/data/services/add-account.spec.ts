@@ -38,7 +38,7 @@ describe("AddAccount", () => {
   it("should call hasher with correct plaintext", async () => {
     const { sut, hasher } = makeSut();
 
-    await sut.execute({ name, email, password });
+    await sut.add({ name, email, password });
 
     expect(hasher.plaintext).toBe(password);
     expect(hasher.callsCount).toBe(1);
@@ -48,7 +48,7 @@ describe("AddAccount", () => {
     const { sut, hasher } = makeSut();
 
     jest.spyOn(hasher, "hash").mockImplementationOnce(throwError);
-    const promise = sut.execute({ name, email, password });
+    const promise = sut.add({ name, email, password });
 
     await expect(promise).rejects.toThrow();
   });
@@ -56,7 +56,7 @@ describe("AddAccount", () => {
   it("should call addAccountRepository with correct values", async () => {
     const { sut, addAccountRepositoryMock, hasher } = makeSut();
 
-    await sut.execute({ name, email, password });
+    await sut.add({ name, email, password });
 
     expect(addAccountRepositoryMock.name).toBe(name);
     expect(addAccountRepositoryMock.email).toBe(email);
@@ -68,7 +68,7 @@ describe("AddAccount", () => {
     const { sut, addAccountRepositoryMock } = makeSut();
 
     addAccountRepositoryMock.output = false;
-    const isValid = await sut.execute({ name, email, password });
+    const isValid = await sut.add({ name, email, password });
 
     expect(isValid).toBe(false);
   });
@@ -76,7 +76,7 @@ describe("AddAccount", () => {
   it("should return true on success", async () => {
     const { sut } = makeSut();
 
-    const isValid = await sut.execute({ name, email, password });
+    const isValid = await sut.add({ name, email, password });
 
     expect(isValid).toEqual(true);
   });
@@ -84,7 +84,7 @@ describe("AddAccount", () => {
   it("should call checkAccountByEmailRepository with correct email", async () => {
     const { sut, checkAccountByEmailRepository } = makeSut();
 
-    await sut.execute({ name, email, password });
+    await sut.add({ name, email, password });
 
     expect(checkAccountByEmailRepository.email).toBe(email);
     expect(checkAccountByEmailRepository.callsCount).toBe(1);
@@ -94,7 +94,7 @@ describe("AddAccount", () => {
     const { sut, checkAccountByEmailRepository } = makeSut();
 
     checkAccountByEmailRepository.output = true;
-    const isValid = await sut.execute({ name, email, password });
+    const isValid = await sut.add({ name, email, password });
 
     expect(isValid).toBe(false);
   });

@@ -2,7 +2,7 @@ import { throwError } from "@/tests/domain/mocks";
 import { LoadDrawsService } from "@/data/services";
 import { LoadDrawsRepositoryMock } from "@/tests/data/mocks";
 
-export type SutTypes = {
+type SutTypes = {
   sut: LoadDrawsService;
   loadDrawsRepositoryMock: LoadDrawsRepositoryMock;
 };
@@ -20,7 +20,7 @@ describe("LoadDraws", () => {
   it("should load all draws", async () => {
     const { sut, loadDrawsRepositoryMock } = makeSut();
 
-    const promise = await sut.execute();
+    const promise = await sut.load();
 
     expect(promise).toEqual(loadDrawsRepositoryMock.output);
   });
@@ -28,7 +28,7 @@ describe("LoadDraws", () => {
   it("should call LoadDrawsRepository", async () => {
     const { sut, loadDrawsRepositoryMock } = makeSut();
 
-    await sut.execute();
+    await sut.load();
 
     expect(loadDrawsRepositoryMock.callsCount).toBe(1);
   });
@@ -39,7 +39,7 @@ describe("LoadDraws", () => {
     jest
       .spyOn(loadDrawsRepositoryMock, "loadAll")
       .mockImplementationOnce(throwError);
-    const promise = sut.execute();
+    const promise = sut.load();
 
     await expect(promise).rejects.toThrow();
   });
