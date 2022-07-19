@@ -1,46 +1,6 @@
 import { throwError } from "@/tests/domain/mocks";
-
-class LoadDraws {
-  constructor(private readonly loadDrawsRepository: LoadDrawsRepository) {}
-
-  async execute(): Promise<LoadDrawsRepository.Output> {
-    return await this.loadDrawsRepository.loadAll();
-  }
-}
-
-type GroupDraw = {
-  id: string;
-  name: string;
-  description: string;
-  userId: string;
-  prizeImg: string;
-};
-
-interface LoadDrawsRepository {
-  loadAll(): Promise<LoadDrawsRepository.Output>;
-}
-
-namespace LoadDrawsRepository {
-  export type Output = GroupDraw[] | undefined;
-}
-
-class LoadDrawsRepositoryMock implements LoadDrawsRepository {
-  callsCount = 0;
-  output: LoadDrawsRepository.Output = [
-    {
-      id: "any_id",
-      name: "any_name",
-      description: "any_description",
-      userId: "any_user_id",
-      prizeImg: "any_prize_img",
-    },
-  ];
-
-  async loadAll(): Promise<LoadDrawsRepository.Output> {
-    this.callsCount++;
-    return this.output;
-  }
-}
+import { LoadDraws } from "@/data/services";
+import { LoadDrawsRepositoryMock } from "@/tests/data/mocks";
 
 export type SutTypes = {
   sut: LoadDraws;
