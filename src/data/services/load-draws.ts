@@ -1,6 +1,6 @@
 import { LoadDrawsRepository } from "@/data/contracts";
 
-export class LoadDraws {
+export class LoadDrawsService {
   constructor(private readonly loadDrawsRepository: LoadDrawsRepository) {}
 
   async execute(): Promise<LoadDrawsRepository.Output> {

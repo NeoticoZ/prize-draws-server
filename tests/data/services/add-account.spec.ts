@@ -4,6 +4,7 @@ import {
   CheckAccountByEmailRepositoryMock,
   HasherMock,
 } from "@/tests/data/mocks";
+import { throwError } from "@/tests/domain/mocks";
 
 export type SutTypes = {
   sut: AddAccountService;
@@ -29,7 +30,7 @@ const makeSut = (): SutTypes => {
   };
 };
 
-describe("addAccount", () => {
+describe("AddAccount", () => {
   const name = "any_name";
   const email = "any_email";
   const password = "any_password";
@@ -46,9 +47,7 @@ describe("addAccount", () => {
   it("should throw if hasher throws", async () => {
     const { sut, hasher } = makeSut();
 
-    jest.spyOn(hasher, "hash").mockImplementationOnce(() => {
-      throw new Error();
-    });
+    jest.spyOn(hasher, "hash").mockImplementationOnce(throwError);
     const promise = sut.execute({ name, email, password });
 
     await expect(promise).rejects.toThrow();

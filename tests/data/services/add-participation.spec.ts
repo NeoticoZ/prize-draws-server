@@ -1,92 +1,12 @@
 import { throwError } from "@/tests/domain/mocks";
-
-class AddParticipation {
-  constructor(
-    private readonly addParticipationRepository: AddParticipationRepository,
-    private readonly checkIfIsParticipingRepository: CheckIfIsParticipingRepository
-  ) {}
-
-  public async execute({
-    drawId,
-    userId,
-  }: AddParticipationRepository.Params): Promise<void> {
-    const isParticipating = await this.checkIfIsParticipingRepository.check({
-      userId,
-      drawId,
-    });
-
-    if (!isParticipating) {
-      await this.addParticipationRepository.add({
-        drawId,
-        userId,
-      });
-    }
-  }
-}
-
-interface AddParticipationRepository {
-  add: ({ drawId, userId }: AddParticipationRepository.Params) => Promise<void>;
-}
-
-namespace AddParticipationRepository {
-  export type Params = {
-    drawId: string;
-    userId: string;
-  };
-}
-
-class AddParticipationRepositoryMock implements AddParticipationRepository {
-  drawId: string;
-  userId: string;
-  callsCount = 0;
-
-  async add({
-    drawId,
-    userId,
-  }: AddParticipationRepository.Params): Promise<void> {
-    this.drawId = drawId;
-    this.userId = userId;
-    this.callsCount++;
-  }
-}
-
-interface CheckIfIsParticipingRepository {
-  check: ({
-    userId,
-    drawId,
-  }: CheckIfIsParticipingRepository.Params) => Promise<CheckIfIsParticipingRepository.Output>;
-}
-
-namespace CheckIfIsParticipingRepository {
-  export type Params = {
-    userId: string;
-    drawId: string;
-  };
-
-  export type Output = boolean;
-}
-
-class CheckIfIsParticipingRepositoryMock
-  implements CheckIfIsParticipingRepository
-{
-  userId: string;
-  drawId: string;
-  callsCount = 0;
-  output = false;
-
-  async check({
-    userId,
-    drawId,
-  }: CheckIfIsParticipingRepository.Params): Promise<CheckIfIsParticipingRepository.Output> {
-    this.userId = userId;
-    this.drawId = drawId;
-    this.callsCount++;
-    return this.output;
-  }
-}
+import { AddParticipationService } from "@/data/services";
+import {
+  AddParticipationRepositoryMock,
+  CheckIfIsParticipingRepositoryMock,
+} from "@/tests/data/mocks";
 
 type SutTypes = {
-  sut: AddParticipation;
+  sut: AddParticipationService;
   addParticipationRepositoryMock: AddParticipationRepositoryMock;
   checkIfIsParticipingRepositoryMock: CheckIfIsParticipingRepositoryMock;
 };
@@ -95,7 +15,7 @@ const makeSut = (): SutTypes => {
   const addParticipationRepositoryMock = new AddParticipationRepositoryMock();
   const checkIfIsParticipingRepositoryMock =
     new CheckIfIsParticipingRepositoryMock();
-  const sut = new AddParticipation(
+  const sut = new AddParticipationService(
     addParticipationRepositoryMock,
     checkIfIsParticipingRepositoryMock
   );

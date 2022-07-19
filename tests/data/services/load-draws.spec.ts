@@ -1,15 +1,15 @@
 import { throwError } from "@/tests/domain/mocks";
-import { LoadDraws } from "@/data/services";
+import { LoadDrawsService } from "@/data/services";
 import { LoadDrawsRepositoryMock } from "@/tests/data/mocks";
 
 export type SutTypes = {
-  sut: LoadDraws;
+  sut: LoadDrawsService;
   loadDrawsRepositoryMock: LoadDrawsRepositoryMock;
 };
 
 const makeSut = (): SutTypes => {
   const loadDrawsRepositoryMock = new LoadDrawsRepositoryMock();
-  const sut = new LoadDraws(loadDrawsRepositoryMock);
+  const sut = new LoadDrawsService(loadDrawsRepositoryMock);
   return {
     sut,
     loadDrawsRepositoryMock,
