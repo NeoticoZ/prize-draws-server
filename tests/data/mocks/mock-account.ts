@@ -1,4 +1,6 @@
 import {
+  AddAccountRepository,
+  CheckAccountByEmailRepository,
   LoadAccountByEmailRepository,
   UpdateAccessTokenRepository,
 } from "@/data/contracts";
@@ -31,5 +33,39 @@ export class UpdateAccessTokenRepositoryStub
   async updateAccessToken(userId: string, accessToken: string): Promise<void> {
     this.userId = userId;
     this.accessToken = accessToken;
+  }
+}
+
+export class AddAccountRepositoryMock implements AddAccountRepository {
+  name: string;
+  email: string;
+  password: string;
+  callsCount = 0;
+  output: AddAccountRepository.Output = true;
+
+  async add(
+    user: AddAccountRepository.Params
+  ): Promise<AddAccountRepository.Output> {
+    this.callsCount++;
+    this.name = user.name;
+    this.email = user.email;
+    this.password = user.password;
+    return this.output;
+  }
+}
+
+export class CheckAccountByEmailRepositoryMock
+  implements CheckAccountByEmailRepository
+{
+  email: string;
+  callsCount = 0;
+  output: CheckAccountByEmailRepository.Output = false;
+
+  async loadByEmail(
+    email: string
+  ): Promise<CheckAccountByEmailRepository.Output> {
+    this.callsCount++;
+    this.email = email;
+    return this.output;
   }
 }

@@ -1,4 +1,4 @@
-import { Encrypter, HashComparer } from "@/data/contracts";
+import { Encrypter, HashComparer, Hasher } from "@/data/contracts";
 
 export class HashComparerStub implements HashComparer {
   plainText: string;
@@ -17,6 +17,18 @@ export class EncrypterStub implements Encrypter {
   output = "any_token";
 
   async encrypt(plaintext: string): Promise<string> {
+    this.plaintext = plaintext;
+    return this.output;
+  }
+}
+
+export class HasherMock implements Hasher {
+  callsCount = 0;
+  plaintext: string;
+  output: string = "any_hash";
+
+  async hash(plaintext: string): Promise<string> {
+    this.callsCount++;
     this.plaintext = plaintext;
     return this.output;
   }
