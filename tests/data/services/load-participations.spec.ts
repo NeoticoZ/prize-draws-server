@@ -1,62 +1,18 @@
 import { throwError } from "@/tests/domain/mocks";
-
-class LoadParticipations {
-  constructor(
-    private readonly loadParticipationsByDrawIdRepository: LoadParticipationsByDrawIdRepository
-  ) {}
-
-  async execute(
-    drawId: string
-  ): Promise<LoadParticipationsByDrawIdRepository.Output> {
-    return this.loadParticipationsByDrawIdRepository.loadAll(drawId);
-  }
-}
-
-interface LoadParticipationsByDrawIdRepository {
-  loadAll: (
-    drawId: string
-  ) => Promise<LoadParticipationsByDrawIdRepository.Output>;
-}
-
-namespace LoadParticipationsByDrawIdRepository {
-  export type Output = Participation[];
-}
-
-type Participation = {
-  drawId: string;
-  userId: string;
-};
-
-class LoadParticipationsByDrawIdRepositoryMock
-  implements LoadParticipationsByDrawIdRepository
-{
-  drawId: string;
-  callsCount = 0;
-  output: LoadParticipationsByDrawIdRepository.Output = [
-    {
-      drawId: "any_draw_id",
-      userId: "any_user_id",
-    },
-  ];
-
-  async loadAll(
-    drawId: string
-  ): Promise<LoadParticipationsByDrawIdRepository.Output> {
-    this.callsCount++;
-    this.drawId = drawId;
-    return this.output;
-  }
-}
+import { LoadParticipationsService } from "@/data/services";
+import { LoadParticipationsByDrawIdRepositoryMock } from "@/tests/data/mocks";
 
 type SutTypes = {
-  sut: LoadParticipations;
+  sut: LoadParticipationsService;
   loadParticipationsByDrawIdRepositoryMock: LoadParticipationsByDrawIdRepositoryMock;
 };
 
 const makeSut = (): SutTypes => {
   const loadParticipationsByDrawIdRepositoryMock =
     new LoadParticipationsByDrawIdRepositoryMock();
-  const sut = new LoadParticipations(loadParticipationsByDrawIdRepositoryMock);
+  const sut = new LoadParticipationsService(
+    loadParticipationsByDrawIdRepositoryMock
+  );
   return {
     sut,
     loadParticipationsByDrawIdRepositoryMock,

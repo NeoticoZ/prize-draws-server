@@ -1,6 +1,7 @@
 import {
   AddParticipationRepository,
   CheckIfIsParticipingRepository,
+  LoadParticipationsByDrawIdRepository,
 } from "@/data/contracts";
 
 export class AddParticipationRepositoryMock
@@ -35,6 +36,27 @@ export class CheckIfIsParticipingRepositoryMock
     this.userId = userId;
     this.drawId = drawId;
     this.callsCount++;
+    return this.output;
+  }
+}
+
+export class LoadParticipationsByDrawIdRepositoryMock
+  implements LoadParticipationsByDrawIdRepository
+{
+  drawId: string;
+  callsCount = 0;
+  output: LoadParticipationsByDrawIdRepository.Output = [
+    {
+      drawId: "any_draw_id",
+      userId: "any_user_id",
+    },
+  ];
+
+  async loadAll(
+    drawId: string
+  ): Promise<LoadParticipationsByDrawIdRepository.Output> {
+    this.callsCount++;
+    this.drawId = drawId;
     return this.output;
   }
 }
