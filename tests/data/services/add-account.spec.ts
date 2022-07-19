@@ -6,7 +6,7 @@ import {
 } from "@/tests/data/mocks";
 import { throwError } from "@/tests/domain/mocks";
 
-export type SutTypes = {
+type SutTypes = {
   sut: AddAccountService;
   addAccountRepositoryMock: AddAccountRepositoryMock;
   checkAccountByEmailRepository: CheckAccountByEmailRepositoryMock;

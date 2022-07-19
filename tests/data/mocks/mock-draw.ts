@@ -1,4 +1,4 @@
-import { LoadDrawsRepository } from "@/data/contracts";
+import { AddDrawRepository, LoadDrawsRepository } from "@/data/contracts";
 
 export class LoadDrawsRepositoryMock implements LoadDrawsRepository {
   callsCount = 0;
@@ -15,5 +15,26 @@ export class LoadDrawsRepositoryMock implements LoadDrawsRepository {
   async loadAll(): Promise<LoadDrawsRepository.Output> {
     this.callsCount++;
     return this.output;
+  }
+}
+
+export class AddDrawRepositoryMock implements AddDrawRepository {
+  name: string;
+  description: string;
+  userId: string;
+  prizeImg: string;
+  callsCount = 0;
+
+  async add({
+    name,
+    description,
+    prizeImg,
+    userId,
+  }: AddDrawRepository.Params): Promise<void> {
+    this.name = name;
+    this.description = description;
+    this.userId = userId;
+    this.prizeImg = prizeImg;
+    this.callsCount++;
   }
 }
